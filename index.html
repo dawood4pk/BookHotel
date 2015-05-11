@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<link rel="stylesheet" href="css/css.css" />
+		<!--[if lt IE 9]>
+		<script>
+			document.createElement('header');
+			document.createElement('nav');
+			document.createElement('section');
+			document.createElement('article');
+			document.createElement('aside');
+			document.createElement('footer');
+		</script>
+		<![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	</head>
+	
+	<body>
+	
+		<header id="headerContainer" class="header">
+			
+		</header>
+        <script type="text/template" id="header-area-template">
+        	<h1 class="hotel_name">{{ if (typeof(hotelName) !== "undefined"){}}{{= hotelName }}{{ } }} <span class="stars">{{ if (typeof(hotelRating) !== "undefined"){}}{{= hotelRating }}{{ } }}</span></h1>
+			<address class="hotel_address">{{ if (typeof(hotelAddress) !== "undefined"){}}{{= hotelAddress }}{{ } }}</address>
+			<div id="google-map"></div>
+		</script>
+		
+		<section id="photosContainer" class="photos">
+			
+		</section>
+        <script type="text/template" id="photos-area-template">
+			<div id="photoCarousel">
+			  <a class="button_next">></a>
+			  <a class="button_prev"><</a>
+			  <ul>
+				{{ if (typeof(hotelPhotos) !== "undefined"){ _.each(hotelPhotos, function(hotelPhotos){ }}
+					<li><img src="{{ if (typeof(hotelPhotos.imageLargeUrl) !== "undefined"){}}{{= hotelPhotos.imageLargeUrl }}{{ } }}" alt="{{ if (typeof(hotelPhotos.imageDescription) !== "undefined"){}}{{= hotelPhotos.imageDescription }}{{ } }}" /><span class="desc">{{ if (typeof(hotelPhotos.imageDescription) !== "undefined"){}}{{= hotelPhotos.imageDescription }}{{ } }}</span></li>
+				{{ }); } }}
+			  </ul>  
+			</div>
+
+        	<div class="photo_carousel_option">
+			  <input type="checkbox" id="autoSlideshowCheckbox">
+			  <label for="autoSlideshowCheckbox">Auto Slideshow</label>
+			</div>
+		</script>
+		
+		<section id="descriptionContainer" class="description">
+			
+		</section>
+        <script type="text/template" id="description-area-template">
+        	<h2>Description</h2>
+			{{ if (typeof(hotelDescription) !== "undefined"){}}{{= hotelDescription }}{{ } }}
+		</script>
+		
+		<section id="facilitiesContainer" class="facilities">
+			
+		</section>
+        <script type="text/template" id="facilities-area-template">
+        	<h2>Facilities</h2>
+			<ul>
+				{{ if (typeof(hotelFacilities) !== "undefined"){ _.each(hotelFacilities, function(hotelFacilities){ }}
+					<li>
+						{{ if (typeof(hotelFacilities.facilityName) !== "undefined"){}}{{= hotelFacilities.facilityName }}{{ } }}
+					</li>
+				{{ }); } }}
+			</ul>
+		</script>
+		
+		<section id="roomsContainer" class="rooms">
+			
+		</section>
+        <script type="text/template" id="rooms-area-template">
+        	<h2>Select Your Room</h2>
+			<form method="post" action="" class="rooms_table_form">
+				<table class="rooms_table" cellspacing="0" cellpadding="0">
+					<thead>
+						<tr>
+							{{ if (typeof(tableHead) !== "undefined"){ _.each(tableHead, function(tableHead){ }}
+								<th {{ if (typeof(tableHead.tableHeading) !== "undefined"){ if (tableHead.tableHeading === "Room Name"){ }}class="room_name"{{ }if (tableHead.tableHeading === "Occupancy") { }}class="room_occupancy sort_occupancy{{ if ( (typeof(BOOK.HOTEL.Variables.isEnableRoomOccupancySorting) !== "undefined") && (BOOK.HOTEL.Variables.isEnableRoomOccupancySorting === true) ){}} active-filter{{ } }}"{{ }if (tableHead.tableHeading === "Price per Room") { }}class="room_price sort_price{{ if ( (typeof(BOOK.HOTEL.Variables.isEnableRoomPriceSorting) !== "undefined") && (BOOK.HOTEL.Variables.isEnableRoomPriceSorting === true) ){}} active-filter{{ } }}"{{ }if (tableHead.tableHeading === "No. Rooms") { }}class="room_quantity"{{ } } }} >
+									{{ if (typeof(tableHead.tableHeading) !== "undefined"){}}{{= tableHead.tableHeading }}{{ } }}
+								</th>
+							{{ }); } }}
+						</tr>
+					</thead>
+					<tbody>
+						{{ if (typeof(tableBody) !== "undefined"){ _.each(tableBody, function(tableBody){ }}
+							<tr class="one_room">
+								<td class="room_name">{{ if (typeof(tableBody.roomName) !== "undefined"){}}{{= tableBody.roomName }}{{ } }}</td>
+								<td class="room_occupancy">{{ if (typeof(tableBody.roomOccupancy) !== "undefined"){}}{{= tableBody.roomOccupancy }}{{ } }}</td>
+								<td class="room_price">{{ if (typeof(BOOK.HOTEL.Constants.CURRENCY_SYMBOL) !== "undefined"){}}{{= BOOK.HOTEL.Constants.CURRENCY_SYMBOL }}{{ } }}{{ if (typeof(tableBody.roomPrice) !== "undefined"){}}{{= tableBody.roomPrice }}{{ } }}</td>
+								<td class="room_quantity">
+									<select name="{{ if (typeof(tableBody.roomName) !== "undefined"){}}{{= tableBody.roomName.split(' ').join('').split('+').join('plus').toLowerCase() }}{{ } }}">
+									
+										{{ if (typeof(tableBody.maxAvailable) !== "undefined"){ for (i=0; i <= tableBody.maxAvailable; i++) { }}
+											<option value="{{= i }}" {{ if (i === BOOK.HOTEL.Variables.roomQuantities[tableBody.roomName.split(' ').join('').split('+').join('plus').toLowerCase()]){ }}selected="selected"{{ } }}>{{= i }}</option>
+										{{ } } }}
+									</select>
+								</td>
+							</tr>
+						{{ }); } }}
+						
+						<tr class="one_room">
+							<td class="room_name">Total:</td>
+							<td class="room_occupancy">-</td>
+							<td class="room_price">-</td>
+							<td id="grandTotal" class="room_quantity">
+								{{ if (typeof(BOOK.HOTEL.Constants.CURRENCY_SYMBOL) !== "undefined"){}}{{= BOOK.HOTEL.Constants.CURRENCY_SYMBOL }}{{ } }}0.00
+							</td>
+						</tr>
+
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="4">
+								<button class="button" type="submit">Book Now</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+		</script>
+
+		<section id="reviewsContainer" class="reviews">
+			
+		</section>
+        <script type="text/template" id="reviews-area-template">
+        	<h2>Reviews</h2>
+
+			<ul class="sorting">
+				<li>Sort by:</li>
+				<li id="filterReviews" class="reviews-filter {{ if ( (typeof(BOOK.HOTEL.Variables.reviewsSortDirection) !== "undefined") && (BOOK.HOTEL.Variables.reviewsSortDirection === "ASC") ){}} arrow-down{{ } }}{{ if ( (typeof(BOOK.HOTEL.Variables.isEnableReviewsSorting) !== "undefined") && (BOOK.HOTEL.Variables.isEnableReviewsSorting === true) ){}} active-filter{{ } }}">Reviews</li>
+				<li id="filterDefault" class="default-filter {{ if ( (typeof(BOOK.HOTEL.Variables.isEnableReviewsSorting) !== "undefined") && (BOOK.HOTEL.Variables.isEnableReviewsSorting === false) ){}} active-filter{{ } }}">Default</li>
+			</ul>
+
+			<ul class="reviews_list">
+				{{ if (typeof(hotelReviews) !== "undefined"){ _.each(hotelReviews, function(hotelReviews){ }}
+					<li class="one_review">
+						<strong class="review_score">{{ if (typeof(hotelReviews.reviewScore) !== "undefined"){}}{{= hotelReviews.reviewScore }}{{ } }}</strong>
+						<blockquote class="review_content">
+							{{ if (typeof(hotelReviews.reviewContent) !== "undefined"){}}{{= hotelReviews.reviewContent }}{{ } }}
+							<cite>{{ if (typeof(hotelReviews.reviewerName) !== "undefined"){}}{{= hotelReviews.reviewerName }}{{ } }}</cite>
+						</blockquote>
+					</li>
+				{{ }); } }}
+			</ul>
+			
+			{{ if (typeof(pagination) !== "undefined"){ }}
+				<div class="pagination">
+					<ul>
+						{{ for (i=1; i <= pagination; i++) { }}
+							<li title="{{= i }}" {{ if (i === BOOK.HOTEL.Variables.reviewsCurrentPage){ }}class="active"{{ } }}>{{= i }}</li>
+						{{ } }}
+					</ul>
+				</div>
+			{{ } }}
+		</script>
+        <!--{{ if (typeof(pagination) !== "undefined"){ }}
+            <div class="pagination">
+                <ul>
+
+                    {{ if( ( BOOK.HOTEL.Variables.reviewsCurrentPage + 1 ) > BOOK.HOTEL.Variables.eitherSide ){ }}
+                        <li>...</li>
+                    {{ } }}
+
+                    {{ for (i=1; i <= pagination; i++) { }}
+
+                    {{ if( ( i > ( BOOK.HOTEL.Variables.reviewsCurrentPage - BOOK.HOTEL.Variables.eitherSide ) ) && ( i < ( BOOK.HOTEL.Variables.reviewsCurrentPage + BOOK.HOTEL.Variables.eitherSide ) ) ){ }}
+                        <li title="{{= i }}" {{ if (i === BOOK.HOTEL.Variables.reviewsCurrentPage){ }}class="active"{{ } }}>{{= i }}</li>
+                    {{ } }}
+
+                    {{ } }}
+                    
+                    {{ if( ( BOOK.HOTEL.Variables.reviewsCurrentPage + BOOK.HOTEL.Variables.eitherSide ) < BOOK.HOTEL.Variables.reviewsTotalBlocks ){ }}
+                        <li>...</li>
+                    {{ } }}
+
+                </ul>
+            </div>
+        {{ } }}-->
+	
+		<section id="footerContainer" class="footer">
+			
+		</section>
+
+		<script src="js/lib/jquery-1.11.1.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
+        <script src="js/lib/underscore.js"></script>
+		<script src="js/js.js"></script>
+        <script id="rest-services" type="text/x-json">
+		{
+		  "hotel-data": "rest/hotel.js"
+		}
+		</script>
+	</body>
+</html>
