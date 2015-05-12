@@ -126,7 +126,18 @@ BOOK.HOTEL.Functions.loadHeader = function() {
 							hotelRating: BOOK.HOTEL.Variables.json.hotelRating,
 							hotelAddress: BOOK.HOTEL.Variables.json.hotelAddress
 						} ) );
-		google.maps.event.addDomListener( window, 'load', BOOK.HOTEL.Functions.loadGoogleMap( BOOK.HOTEL.Variables.json.hotelLatitude, BOOK.HOTEL.Variables.json.hotelLongitude, BOOK.HOTEL.Variables.json.hotelAddress, BOOK.HOTEL.Variables.json.hotelAddress ) );
+
+		////////GOOGLE MAP/////////////
+		if (typeof google === 'object' && typeof google.maps === 'object')
+		{
+			google.maps.event.addDomListener( window, 'load', BOOK.HOTEL.Functions.loadGoogleMap( BOOK.HOTEL.Variables.json.hotelLatitude, BOOK.HOTEL.Variables.json.hotelLongitude, BOOK.HOTEL.Variables.json.hotelAddress, BOOK.HOTEL.Variables.json.hotelAddress ) );
+		}
+		else
+		{
+			$('#google-map').html('Google Map API is not loaded properly or included.');
+		}
+		////////GOOGLE MAP/////////////
+
 	}
 					
 }; // End of loadHeader.
