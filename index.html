@@ -164,7 +164,7 @@
 					{{ } }}
 					
 					{{ if ( ( pagination.length > 1 ) && ( pagination[0] !== 1 ) ){ }}
-						<li>...</li>
+						<li class="default_pointer">...</li>
 					{{ } }}
 
 					{{ for (i=0; i < pagination.length; i++) { }}
@@ -172,7 +172,7 @@
 					{{ } }}
 			
 					{{ if ( ( pagination.length > 1 ) && ( pagination[pagination.length-1] !== BOOK.HOTEL.Variables.reviewsNumberOfPages ) ){ }}
-						<li>...</li>
+						<li class="default_pointer">...</li>
 					{{ } }}
 
 

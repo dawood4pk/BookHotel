@@ -591,8 +591,11 @@ BOOK.HOTEL.Functions.registerReviewsEvents = function() {
 	
 	// Pagination Click Function
 	$('.pagination li').on('click', function(){
-		BOOK.HOTEL.Variables.reviewsCurrentPage = parseInt( $.trim(this.title) );
-		BOOK.HOTEL.Functions.loadReviews();
+		//debugger;
+		if ( $.trim(this.title) !== '' ){
+			BOOK.HOTEL.Variables.reviewsCurrentPage = parseInt( $.trim(this.title) );
+			BOOK.HOTEL.Functions.loadReviews();
+		}
 	});
 }; // End of registerReviewsClickEvents.
 
