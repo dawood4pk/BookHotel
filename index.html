@@ -146,41 +146,49 @@
 					</li>
 				{{ }); } }}
 			</ul>
-			
+
 			{{ if (typeof(pagination) !== "undefined"){ }}
-				<div class="pagination">
-					<ul>
-						{{ for (i=1; i <= pagination; i++) { }}
-							<li title="{{= i }}" {{ if (i === BOOK.HOTEL.Variables.reviewsCurrentPage){ }}class="active"{{ } }}>{{= i }}</li>
-						{{ } }}
-					</ul>
-				</div>
-			{{ } }}
-		</script>
-        <!--{{ if (typeof(pagination) !== "undefined"){ }}
+
+				Page {{= BOOK.HOTEL.Variables.reviewsCurrentPage }} of {{= BOOK.HOTEL.Variables.reviewsNumberOfPages }}<br>( {{= BOOK.HOTEL.Variables.reviewsTotalBlocks-1 }} records )
+
             <div class="pagination">
                 <ul>
+				
+					{{ if ( ( BOOK.HOTEL.Variables.reviewsNumberOfPages > 1 ) && ( BOOK.HOTEL.Variables.reviewsCurrentPage !== 1 ) ){ }}
+						<li title="1">First</li>
+					{{ } }}
 
-                    {{ if( ( BOOK.HOTEL.Variables.reviewsCurrentPage + 1 ) > BOOK.HOTEL.Variables.eitherSide ){ }}
-                        <li>...</li>
-                    {{ } }}
 
-                    {{ for (i=1; i <= pagination; i++) { }}
+					{{ if ( ( BOOK.HOTEL.Variables.reviewsNumberOfPages > 1 ) && ( BOOK.HOTEL.Variables.reviewsCurrentPage !== 1 ) ){ }}
+						<li title="{{ if ( ( BOOK.HOTEL.Variables.reviewsCurrentPage - 1 ) >= 1 ){ }}{{= BOOK.HOTEL.Variables.reviewsCurrentPage-1 }}{{ }else{ }}1{{ } }}">Previous</li>
+					{{ } }}
+					
+					{{ if ( ( pagination.length > 1 ) && ( pagination[0] !== 1 ) ){ }}
+						<li>...</li>
+					{{ } }}
 
-                    {{ if( ( i > ( BOOK.HOTEL.Variables.reviewsCurrentPage - BOOK.HOTEL.Variables.eitherSide ) ) && ( i < ( BOOK.HOTEL.Variables.reviewsCurrentPage + BOOK.HOTEL.Variables.eitherSide ) ) ){ }}
-                        <li title="{{= i }}" {{ if (i === BOOK.HOTEL.Variables.reviewsCurrentPage){ }}class="active"{{ } }}>{{= i }}</li>
-                    {{ } }}
+					{{ for (i=0; i < pagination.length; i++) { }}
+						<li title="{{= pagination[i] }}" {{ if (pagination[i] === BOOK.HOTEL.Variables.reviewsCurrentPage){ }}class="active"{{ } }}>{{= pagination[i] }}</li>
+					{{ } }}
+			
+					{{ if ( ( pagination.length > 1 ) && ( pagination[pagination.length-1] !== BOOK.HOTEL.Variables.reviewsNumberOfPages ) ){ }}
+						<li>...</li>
+					{{ } }}
 
-                    {{ } }}
-                    
-                    {{ if( ( BOOK.HOTEL.Variables.reviewsCurrentPage + BOOK.HOTEL.Variables.eitherSide ) < BOOK.HOTEL.Variables.reviewsTotalBlocks ){ }}
-                        <li>...</li>
-                    {{ } }}
 
+					{{ if ( ( BOOK.HOTEL.Variables.reviewsNumberOfPages > 1 ) && ( BOOK.HOTEL.Variables.reviewsCurrentPage !== BOOK.HOTEL.Variables.reviewsNumberOfPages ) ){ }}
+					
+						<li title="{{ if ( ( BOOK.HOTEL.Variables.reviewsCurrentPage + 1 ) <= BOOK.HOTEL.Variables.reviewsNumberOfPages ){ }}{{= BOOK.HOTEL.Variables.reviewsCurrentPage+1 }}{{ }else{ }}{{= BOOK.HOTEL.Variables.reviewsNumberOfPages }}{{ } }}">Next</li>
+					{{ } }}
+
+					{{ if ( ( BOOK.HOTEL.Variables.reviewsNumberOfPages > 1 ) && ( BOOK.HOTEL.Variables.reviewsCurrentPage !== BOOK.HOTEL.Variables.reviewsNumberOfPages ) ){ }}
+						<li title="{{= BOOK.HOTEL.Variables.reviewsNumberOfPages }}">Last</li>
+					{{ } }}
                 </ul>
             </div>
-        {{ } }}-->
-	
+        {{ } }}
+		</script>
+
 		<section id="footerContainer" class="footer">
 			
 		</section>

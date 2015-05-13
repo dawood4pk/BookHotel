@@ -28,9 +28,15 @@ BOOK.HOTEL = {
 		};
 
 BOOK.HOTEL.Constants.CURRENCY_SYMBOL = 'PKR - ';
+
+// Number of 'Reviews Blocks' to show per page.
 BOOK.HOTEL.Variables.reviewsPerPageBlocks = 5;
+
+// Number of 'Reviews Blocks' pages to show.
+BOOK.HOTEL.Variables.reviewsShowEachSideLimit = 4;
+
+// Current page number of 'Reviews Blocks'
 BOOK.HOTEL.Variables.reviewsCurrentPage = 1;
-BOOK.HOTEL.Variables.reviewsShowEachSide = 1;
 
 BOOK.HOTEL.Variables.isEnableReviewsSorting = false;
 BOOK.HOTEL.Variables.isEnableRoomOccupancySorting = false;
@@ -137,7 +143,7 @@ BOOK.HOTEL.Functions.loadHeader = function() {
 			$('#google-map').html('Google Map API is not loaded properly or included.');
 		}
 		////////GOOGLE MAP/////////////
-
+		
 	}
 					
 }; // End of loadHeader.
@@ -477,19 +483,23 @@ BOOK.HOTEL.Functions.loadReviews = function() {
 		{
 			BOOK.HOTEL.Variables.reviewsSortedBlocks = BOOK.HOTEL.Variables.json.hotelReviews;
 		}
-		
+
+		// Number of 'Reviews Blocks' in list.
 		if (typeof BOOK.HOTEL.Variables.reviewsTotalBlocks === 'undefined') {
 			BOOK.HOTEL.Variables.reviewsTotalBlocks = BOOK.HOTEL.Variables.reviewsSortedBlocks.length;
 		}
-	
+
+		// Number of pages of 'Reviews Blocks'
 		if (typeof BOOK.HOTEL.Variables.reviewsNumberOfPages === 'undefined') {
 			BOOK.HOTEL.Variables.reviewsNumberOfPages = Math.ceil( BOOK.HOTEL.Variables.reviewsTotalBlocks / BOOK.HOTEL.Variables.reviewsPerPageBlocks );
 		}
-		
+
+		// 'Reviews Blocks' start index.
 		BOOK.HOTEL.Variables.BlocksFrom = ( BOOK.HOTEL.Variables.reviewsCurrentPage * BOOK.HOTEL.Variables.reviewsPerPageBlocks ) - BOOK.HOTEL.Variables.reviewsPerPageBlocks + 1;
-	
+
+		// 'Reviews Blocks' end index.
 		BOOK.HOTEL.Variables.BlocksTo = ( BOOK.HOTEL.Variables.BlocksFrom - 1 ) + BOOK.HOTEL.Variables.reviewsPerPageBlocks;
-	
+
 		BOOK.HOTEL.Variables.hotelReviews = [];
 		//debugger;
 		for ( var i = BOOK.HOTEL.Variables.BlocksFrom; i <= BOOK.HOTEL.Variables.BlocksTo; i++ )
@@ -499,14 +509,47 @@ BOOK.HOTEL.Functions.loadReviews = function() {
 				BOOK.HOTEL.Variables.hotelReviews.push( BOOK.HOTEL.Variables.reviewsSortedBlocks[i] );
 			}
 		}
-	
-		//BOOK.HOTEL.Variables.eitherSide = BOOK.HOTEL.Variables.reviewsShowEachSide * BOOK.HOTEL.Variables.reviewsPerPageBlocks;
-	
-		$('#reviewsContainer').html( reviewsTemplate( {hotelReviews: BOOK.HOTEL.Variables.hotelReviews, pagination: BOOK.HOTEL.Variables.reviewsNumberOfPages} ) );
+		//debugger;
+		$('#reviewsContainer').html( reviewsTemplate( {hotelReviews: BOOK.HOTEL.Variables.hotelReviews, pagination: BOOK.HOTEL.Functions.renderPaging(BOOK.HOTEL.Variables.reviewsNumberOfPages, BOOK.HOTEL.Variables.reviewsCurrentPage, BOOK.HOTEL.Variables.reviewsShowEachSideLimit)} ) );
 		
 		BOOK.HOTEL.Functions.registerReviewsEvents();
 	}
 }; // End of loadReviews.
+
+//////////////////////////////////////////////////////////////////////
+//function: BOOK.HOTEL.Functions.renderPaging.                      //
+//////////////////////////////////////////////////////////////////////
+BOOK.HOTEL.Functions.renderPaging = function(total, current, limit) {
+	if (total < current || total <= 0 || limit <= 0) {
+		return;
+	}
+	
+	var pager = [],       // list of page links
+		index = current;  // find the index of current page link
+	
+	// curent page link should be in there right?
+	pager.push(index);
+	
+	// create a deviation off the current index
+	// and add if they satisfy the limit condition
+	for (var dev = 1; pager.length < limit; dev++) {
+			var left = index - dev,
+				right = index + dev;
+			
+			if (left > 0 && pager.length < limit) {
+				pager.push(left);
+			}
+			
+			if (right <= total && pager.length < limit) {
+				pager.push(right);
+			}
+			
+			if (dev >= total) {
+				break;
+			}
+		}
+		return pager.sort(function(a, b) { return a >b; });
+}; // End of renderPaging.
 
 //////////////////////////////////////////////////////////////////////
 //function: BOOK.HOTEL.Functions.registerReviewsClickEvents.     //
