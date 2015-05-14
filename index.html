@@ -90,7 +90,7 @@
 							<tr class="one_room">
 								<td class="room_name">{{ if (typeof(tableBody.roomName) !== "undefined"){}}{{= tableBody.roomName }}{{ } }}</td>
 								<td class="room_occupancy">{{ if (typeof(tableBody.roomOccupancy) !== "undefined"){}}{{= tableBody.roomOccupancy }}{{ } }}</td>
-								<td class="room_price">{{ if (typeof(BOOK.HOTEL.Constants.CURRENCY_SYMBOL) !== "undefined"){}}{{= BOOK.HOTEL.Constants.CURRENCY_SYMBOL }}{{ } }}{{ if (typeof(tableBody.roomPrice) !== "undefined"){}}{{= tableBody.roomPrice }}{{ } }}</td>
+								<td class="room_price">{{ if (typeof(BOOK.HOTEL.Constants.CURRENCY_SYMBOL) !== "undefined"){}}{{= BOOK.HOTEL.Constants.CURRENCY_SYMBOL }}{{ } }}{{ if (typeof(tableBody.roomPrice) !== "undefined"){}}{{= BOOK.HOTEL.Functions.formatNumber( tableBody.roomPrice ) }}{{ } }}</td>
 								<td class="room_quantity">
 									<select name="{{ if (typeof(tableBody.roomName) !== "undefined"){}}{{= tableBody.roomName.split(' ').join('').split('+').join('plus').toLowerCase() }}{{ } }}">
 									

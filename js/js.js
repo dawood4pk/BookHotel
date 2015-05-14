@@ -451,7 +451,9 @@ BOOK.HOTEL.Functions.computeGrandTotal = function(rooms) {
 			}
 		}
 	}
-	$('#grandTotal').html ( BOOK.HOTEL.Constants.CURRENCY_SYMBOL+''+ Math.round(BOOK.HOTEL.Variables.total * 100) / 100);
+	//$('#grandTotal').html ( BOOK.HOTEL.Constants.CURRENCY_SYMBOL+''+ Math.round(BOOK.HOTEL.Variables.total * 100) / 100);
+	$('#grandTotal').html ( BOOK.HOTEL.Constants.CURRENCY_SYMBOL+''+ BOOK.HOTEL.Functions.formatNumber(BOOK.HOTEL.Variables.total));
+	
 }; // End of computeGrandTotal.
 
 //////////////////////////////////////////////////////////////////////
@@ -517,38 +519,61 @@ BOOK.HOTEL.Functions.loadReviews = function() {
 }; // End of loadReviews.
 
 //////////////////////////////////////////////////////////////////////
+//function: BOOK.HOTEL.Functions.formatNumber.						//
+//////////////////////////////////////////////////////////////////////
+BOOK.HOTEL.Functions.formatNumber = function(nStr) {
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1))
+	{
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+};// End of formatNumber.
+
+//////////////////////////////////////////////////////////////////////
 //function: BOOK.HOTEL.Functions.renderPaging.                      //
 //////////////////////////////////////////////////////////////////////
-BOOK.HOTEL.Functions.renderPaging = function(total, current, limit) {
-	if (total < current || total <= 0 || limit <= 0) {
+BOOK.HOTEL.Functions.renderPaging = function(totalNumberOfPages, currentPage, limitPage) {
+	if (totalNumberOfPages < currentPage || totalNumberOfPages <= 0 || limitPage <= 0)
+	{
 		return;
 	}
-	
-	var pager = [],       // list of page links
-		index = current;  // find the index of current page link
-	
-	// curent page link should be in there right?
+
+	//List of page links.
+	var pager = [];
+
+	//Index of current page link.
+	var index = currentPage;
+
+	//Curent page link should be in the pager list.
 	pager.push(index);
-	
-	// create a deviation off the current index
-	// and add if they satisfy the limit condition
-	for (var dev = 1; pager.length < limit; dev++) {
-			var left = index - dev,
-				right = index + dev;
-			
-			if (left > 0 && pager.length < limit) {
-				pager.push(left);
-			}
-			
-			if (right <= total && pager.length < limit) {
-				pager.push(right);
-			}
-			
-			if (dev >= total) {
-				break;
-			}
+
+	// Deviation of the current index, and add if they satisfy the limit condition.
+	for ( var deviation = 1; pager.length < limitPage; deviation++ )
+	{
+		var left = index - deviation;
+		var right = index + deviation;
+
+		if ( left > 0 && pager.length < limitPage )
+		{
+			pager.push(left);
 		}
-		return pager.sort(function(a, b) { return a >b; });
+		
+		if ( right <= totalNumberOfPages && pager.length < limitPage )
+		{
+			pager.push( right );
+		}
+		
+		if ( deviation >= totalNumberOfPages )
+		{
+			break;
+		}
+	}
+	return pager.sort( function(a, b) { return a > b; } );
 }; // End of renderPaging.
 
 //////////////////////////////////////////////////////////////////////
